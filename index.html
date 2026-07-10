@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ByteVerse - Premium Online Compiler</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.39.0/min/vs/loader.min.js"></script>
+    <link rel="stylesheet" href="style.css">
+
+    <link rel="stylesheet"href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body>
+
+    <div id="login-screen" class="auth-container">
+        <div class="bg-glow"></div>
+        <div class="login-card">
+            <h2>ByteVerse<span class="accent-text">Pro</span></h2>
+            <p class="subtitle">Sign in to your high-performance sandbox</p>
+            
+            <form id="login-form">
+                <div class="input-group">
+                    <label for="username">Username</label>
+                    <div class="input-wrapper">
+                        <i class="fa-regular fa-user"></i>
+                        <input type="text" id="username" placeholder="Enter username" required autocomplete="off">
+                    </div>
+                </div>
+                
+                <div class="input-group">
+                    <label for="password">Password</label>
+                    <div class="input-wrapper">
+                        <i class="fa-regular fa-lock"></i>
+                        <input type="password" id="password" placeholder="••••••••" required>
+                    </div>
+                </div>
+                
+                <div id="login-error" class="error-msg"></div>
+                
+                <button type="submit" class="btn btn-primary btn-full">
+                    <span>Access Dashboard</span>
+                    <i class="fa-solid fa-arrow-right"></i>
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <div id="app-workspace" class="workspace hidden">
+        
+        <header class="main-header">
+            <div class="logo" onclick="resetToHubHome()">
+                <i class="fa-solid fa-terminal logo-icon"></i>
+                <h2>ByteVerse<span class="accent-text">Pro</span></h2>
+            </div>
+            
+            <div class="track-selector" id="track-selector-nav">
+                <button id="track-popular-btn" class="track-tab active" onclick="switchTrack('popular')">
+                    <i class="fa-solid fa-fire"></i> Popular Track
+                </button>
+                <button id="track-programming-btn" class="track-tab" onclick="switchTrack('programming')">
+                    <i class="fa-solid fa-book-bookmark"></i> Programming Track
+                </button>
+            </div>
+        <nav class="nav-links">
+            <dropdown class="nav-link">
+                <button class="outline-btn">
+                    <i class="fa-solid fa-gear"></i>
+                </button>
+                <div class="dropdown-content">
+                    <a href="#" id="theme-toggle-dropdown"><i class="fas fa-moon"></i> Toggle Theme</a>
+                    <a href="#" id="editor-font-dropdown"><i class="fa-solid fa-font"></i> Editor Font</a>
+                    <a href="#" id="editor-theme-dropdown"><i class="fa-solid fa-palette"></i> Editor Theme</a>
+                    <a href="#" id="account-settings-dropdown"><i class="fa-solid fa-user-cog"></i> Account Settings</a>
+                </div>
+            </dropdown>
+
+            
+            <div class="nav-link" onclick="resetToHubHome()"><i class="fa-solid fa-house"></i> Home</div>
+            <button id="search-toggle" class="outline-btn">
+                <i class="fa-solid fa-magnifying-glass"></i>
+            </button>
+            <button id="docs-toggle" class="outline-btn">
+                <i class="fa-solid fa-book"></i>
+            </button>
+
+            <div class="user-profile" class="outline-btn">
+                <button id="theme-toggle" class="outline-btn">
+                <i class="fas fa-moon"></i>
+            </button>
+                <span class="user-badge"><i class="fa-solid fa-circle-user"></i>Profile</span>
+                <button onclick="logout()" class="btn-logout" title="Sign Out"><i class="fa-solid fa-arrow-right-from-bracket"></i></button>
+            </div>
+        </nav>
+        </header>
+
+        <div id="language-hub-home" class="hub-container">
+            <div class="hub-hero">
+    <h1>Code online with <span class="accent-text">ByteVerse Pro.</span></h1>
+    <p>Select from 16 production environment runtimes to launch an execution sandbox.</p>
+    
+    <div class="search-container">
+        <i class="fa-solid fa-magnifying-glass search-icon"></i>
+        <input type="text" id="lang-search" placeholder="Search languages (e.g. Python, React)..." onkeyup="filterLanguages()">
+    </div>
+</div>
+            
+            <div class="grid-wrapper">
+                <div class="lang-grid-card" onclick="launchLanguageSandbox('python')">
+                    <i class="fa-brands fa-python icon-py"></i>
+                    <div class="grid-card-info"><h3>Python</h3><p>Data Science & Scripting</p></div>
+                </div>
+                <div class="lang-grid-card" onclick="launchLanguageSandbox('javascript')">
+                    <i class="fa-brands fa-js icon-js"></i>
+                    <div class="grid-card-info"><h3>JavaScript</h3><p>Web Clients & Engines</p></div>
+                </div>
+                <div class="lang-grid-card" onclick="launchLanguageSandbox('java')">
+                    <i class="fa-brands fa-java icon-java"></i>
+                    <div class="grid-card-info"><h3>Java</h3><p>Enterprise Applications</p></div>
+                </div>
+                <div class="lang-grid-card" onclick="launchLanguageSandbox('c')">
+                    <span class="fallback-badge c-badge">C</span>
+                    <div class="grid-card-info"><h3>C Language</h3><p>Low-Level Core Systems</p></div>
+                </div>
+                <div class="lang-grid-card" onclick="launchLanguageSandbox('cpp')">
+                    <span class="fallback-badge cpp-badge">C++</span>
+                    <div class="grid-card-info"><h3>C++</h3><p>High-Performance Engines</p></div>
+                </div>
+
+                <div class="lang-grid-card" onclick="launchLanguageSandbox('html')">
+                    <i class="fa-brands fa-html5 icon-html"></i>
+                    <div class="grid-card-info"><h3>HTML5</h3><p>Web Layouts Structure</p></div>
+                </div>
+                <div class="lang-grid-card" onclick="launchLanguageSandbox('mysql')">
+                    <i class="fa-solid fa-database icon-sql"></i>
+                    <div class="grid-card-info"><h3>MySQL</h3><p>Relational Data Queries</p></div>
+                </div>
+                <div class="lang-grid-card" onclick="launchLanguageSandbox('php')">
+                    <i class="fa-brands fa-php icon-php"></i>
+                    <div class="grid-card-info"><h3>PHP</h3><p>Server-Side Rendering</p></div>
+                </div>
+                <div class="lang-grid-card" onclick="launchLanguageSandbox('csharp')">
+                    <span class="fallback-badge cs-badge">C#</span>
+                    <div class="grid-card-info"><h3>C# .NET</h3><p>Cross-Platform App Layer</p></div>
+                </div>
+                <div class="lang-grid-card" onclick="launchLanguageSandbox('assembly')">
+                    <i class="fa-solid fa-microchip icon-asm"></i>
+                    <div class="grid-card-info"><h3>Assembly</h3><p>Direct Register Op-Codes</p></div>
+                </div>
+                <div class="lang-grid-card" onclick="launchLanguageSandbox('lua')">
+                    <span class="fallback-badge lua-badge">Lua</span>
+                    <div class="grid-card-info"><h3>Lua</h3><p>Embedded Game Scripting</p></div>
+                </div>
+                <div class="lang-grid-card" onclick="launchLanguageSandbox('plsql')">
+                    <i class="fa-solid fa-server icon-plsql"></i>
+                    <div class="grid-card-info"><h3>PL/SQL</h3><p>Oracle Database Blocks</p></div>
+                </div>
+                <div class="lang-grid-card" onclick="launchLanguageSandbox('nodejs')">
+                    <i class="fa-brands fa-node-js icon-node"></i>
+                    <div class="grid-card-info"><h3>NodeJS</h3><p>V8 Vitals Backend Systems</p></div>
+                </div>
+                <div class="lang-grid-card" onclick="launchLanguageSandbox('groovy')">
+                    <span class="fallback-badge groovy-badge">Gr</span>
+                    <div class="grid-card-info"><h3>Groovy</h3><p>Apache Agile JVM Build</p></div>
+                </div>
+                <div class="lang-grid-card" onclick="launchLanguageSandbox('react')">
+                    <i class="fa-brands fa-react icon-react"></i>
+                    <div class="grid-card-info"><h3>React JS</h3><p>Reactive UI Components</p></div>
+                </div>
+                <div class="lang-grid-card" onclick="launchLanguageSandbox('ruby')">
+                    <i class="fa-solid fa-gem icon-ruby"></i>
+                    <div class="grid-card-info"><h3>Ruby</h3><p>Elegant Object Frameworks</p></div>
+                </div>
+            </div>
+        </div>
+
+        <div id="popular-track-view" class="track-content-layout hidden">
+            <div class="editor-pane">
+                <div class="pane-toolbar">
+                    <div class="active-file-title">
+                        <button class="btn-back" onclick="resetToHubHome()"><i class="fa-solid fa-chevron-left"></i> Hub Grid</button>
+                        <span id="pop-filename-label">main.py</span>
+                    </div>
+                    <button class="btn btn-run" onclick="executeCurrentCode()">
+                        <i class="fa-solid fa-play"></i> <span>Run Code</span>
+                    </button>
+                </div>
+                <div id="monaco-popular-container" class="editor-instance"></div>
+            </div>
+
+            <div class="console-pane">
+                <div class="pane-toolbar">
+                    <h3><i class="fa-solid fa-terminal"></i> Console Output</h3>
+                    <button class="btn-clear" onclick="clearConsole()"><i class="fa-solid fa-trash-can"></i> Clear</button>
+                </div>
+                <div class="console-body">
+                    <div class="stdin-box">
+                        <label for="stdin-popular"><i class="fa-solid fa-keyboard"></i> STDIN (Input Parameters)</label>
+                        <textarea id="stdin-popular" placeholder="Enter line inputs here..."></textarea>
+                    </div>
+                    <div class="stdout-box">
+                        <label><i class="fa-solid fa-square-poll-horizontal"></i> Execution Result</label>
+                        <pre id="stdout-popular" class="console-output empty-output">Click "Run Code" to view output.</pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="programming-track-view" class="track-content-layout hidden">
+            <aside class="docs-sidebar">
+                <div class="docs-selector-bar">
+                    <button class="btn-back btn-full-width" onclick="resetToHubHome()"><i class="fa-solid fa-chevron-left"></i> Back to Hub Grid</button>
+                </div>
+                <div class="accordion">
+                    <div class="accordion-item active">
+                        <div class="accordion-header" onclick="toggleAccordion(this)">
+                            <span><i class="fa-solid fa-circle-info"></i> Language Basics</span>
+                            <i class="fa-solid fa-chevron-down arrow"></i>
+                        </div>
+                        <div id="doc-basics" class="accordion-content"></div>
+                    </div>
+                    <div class="accordion-item">
+                        <div class="accordion-header" onclick="toggleAccordion(this)">
+                            <span><i class="fa-solid fa-code"></i> Core Syntax Structure</span>
+                            <i class="fa-solid fa-chevron-down arrow"></i>
+                        </div>
+                        <div id="doc-syntax" class="accordion-content"></div>
+                    </div>
+                    <div class="accordion-item">
+                        <div class="accordion-header" onclick="toggleAccordion(this)">
+                            <span><i class="fa-solid fa-cubes"></i> Common Engineering Patterns</span>
+                            <i class="fa-solid fa-chevron-down arrow"></i>
+                        </div>
+                        <div id="doc-patterns" class="accordion-content"></div>
+                    </div>
+                </div>
+            </aside>
+
+            <main class="editor-pane">
+                <div class="pane-toolbar">
+                    <div class="current-file-indicator">
+                        <i class="fa-solid fa-file-code"></i> <span id="prog-filename">main.py</span>
+                    </div>
+                    <button class="btn btn-run" onclick="executeCurrentCode()">
+                        <i class="fa-solid fa-circle-play"></i> <span>Compile & Run</span>
+                    </button>
+                </div>
+                <div id="monaco-programming-container" class="editor-instance"></div>
+            </main>
+
+            <section class="console-pane flex-pane-column">
+                <div class="pane-toolbar">
+                    <h3><i class="fa-solid fa-terminal"></i> Build Streams</h3>
+                    <button class="btn-clear" onclick="clearConsole()"><i class="fa-solid fa-trash-can"></i></button>
+                </div>
+                <div class="console-body">
+                    <div class="stdin-box shrink-stdin">
+                        <label for="stdin-programming"><i class="fa-solid fa-keyboard"></i> STDIN Parameters</label>
+                        <textarea id="stdin-programming" placeholder="Standard execution arguments..."></textarea>
+                    </div>
+                    <div class="stdout-box expand-stdout">
+                        <label><i class="fa-solid fa-square-poll-horizontal"></i> Real-time Output Terminal</label>
+                        <pre id="stdout-programming" class="console-output empty-output">Awaiting sandbox compilation run output stream...</pre>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+
+    <!-- footer section -->
+
+    <!-- FOOTER SECTION -->
+
+<footer class="footer">
+
+    <div class="footer-container">
+
+        <!-- BRAND -->
+
+        <div class="footer-box">
+            <h2 class="footer-logo">⚡ByteVerse</h2>
+            <p>
+                Compile, Run & Learn Programming Online with
+                a modern multi-language code editor powered by
+                Judge0 CE API.
+            </p>
+        </div>
+
+        <!-- QUICK LINKS -->
+
+        <div class="footer-box">
+            <h3>Quick Links</h3>
+
+            <a href="#">Home</a>
+            <a href="#">Compiler</a>
+            <a href="#">Tutorials</a>
+            <a href="#">Pricing</a>
+        </div>
+
+        <!-- TOOLS -->
+
+        <div class="footer-box">
+            <h3>Tools</h3>
+
+            <a href="#">Code Formatter</a>
+            <a href="#">Snippet Generator</a>
+            <a href="#">Theme Toggle</a>
+            <a href="#">Dashboard</a>
+        </div>
+
+        <!-- SOCIALS -->
+
+        <div class="footer-box">
+            <h3>Connect</h3>
+
+            <a href="#"><i class="fab fa-github"></i> GitHub</a>
+            <a href="#"><i class="fab fa-linkedin"></i> LinkedIn</a>
+            <a href="#"><i class="fab fa-instagram"></i> Instagram</a>
+            <a href="#"><i class="fab fa-twitter"></i> Twitter</a>
+        </div>
+
+    </div>
+
+    <!-- COPYRIGHT -->
+
+    <div class="footer-bottom">
+        <p>
+            © 2026 ByteVerse. All Rights Reserved.
+            Built using HTML, CSS, JavaScript & Judge0 CE API.
+        </p>
+    </div>
+
+</footer>
+
+    <script src="app.js"></script>
+</body>
+</html>

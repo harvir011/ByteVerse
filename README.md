@@ -4,8 +4,6 @@ CodeSpark is a modern online code compiler and editor designed to provide a seam
 
 Whether you're a student, developer, or coding enthusiast, CodeSpark makes writing, testing, and sharing code simple and efficient.
 
----
-
 ## ✨ Features
 
 - 🌐 Browser-based code editor
@@ -19,8 +17,6 @@ Whether you're a student, developer, or coding enthusiast, CodeSpark makes writi
 - 🖥️ VS Code-inspired interface
 - 📱 Responsive design
 - 🤖 AI-ready architecture (future enhancement)
-
----
 
 ## 🛠️ Technologies Used
 
@@ -39,7 +35,6 @@ Whether you're a student, developer, or coding enthusiast, CodeSpark makes writi
 ### Code Execution
 - Judge0 API / Piston API
 
----
 
 ## 📂 Project Structure
 
